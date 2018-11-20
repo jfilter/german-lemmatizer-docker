@@ -2,16 +2,16 @@
   <img src="matt-artz-353291-unsplash.jpg" alt="Scissors">
 </div>
 
-# German Lemmatizer
+# `German Lemmatizer`
 
 Combining the Power of Several Tools for [Lemmatization](https://en.wikipedia.org/wiki/Lemmatisation) of German Text.
 
 Built upon:
 
--   [WITD]() uses the crowd-generated token tables on [de.wikitionary]().
--   [GermaLemma](https://github.com/WZBSocialScienceCenter/germalemma): Looks up lemmas in the [TIGER Corpus](http://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/TIGERCorpus/) and uses [Pattern]() as a fallback for some rule-based lemmatizations.
+-   [IWNLP](https://github.com/Liebeck/spacy-iwnlp) uses the crowd-generated token tables on [de.wikitionary](https://de.wiktionary.org/).
+-   [GermaLemma](https://github.com/WZBSocialScienceCenter/germalemma): Looks up lemmas in the [TIGER Corpus](http://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/TIGERCorpus/) and uses [Pattern](https://www.clips.uantwerpen.be/pattern) as a fallback for some rule-based lemmatizations.
 
-It works as follows. First POSing the text with [spaCy](). Then looks up lemmas on WITD and GermanLemma. If they disagree, choose the one from WITD. If only found by one, take it. Try to keep the casing of the original token.
+`German Lemmatizer` works as follows. First [spaCy](https://spacy.io/) tags the token with POS. Then `German Lemmatizer` looks up lemmas on IWNLP and GermanLemma. If they disagree, choose the one from IWNLP. If they agree or only one tool finds it, take it. Try to preserve the casing of the original token.
 
 ## Installation
 
