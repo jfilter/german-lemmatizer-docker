@@ -76,27 +76,32 @@ def lemma(text):
     return [process_token(str(token), token._.iwnlp_lemmas, token.pos_) for token in doc]
 
 
-def process_file(path):
-    text = path.read_text()
-    Path('/data/output/' + path.name).write_text(' '.join(lemma(text)))
+def process_file(path, per_line):
+    if per_line:
+        with open(Path('/output/' + path.name), 'w') as outfile:
+            with open(path) as infile:
+                for text in infile:
+                    outfile.write(' '.join(lemma(text)))
+    else:
+        text = path.read_text()
+        Path('/output/' + path.name).write_text(' '.join(lemma(text)))
 
 
 # # https://stackoverflow.com/questions/46245844/pass-arguments-to-python-argparse-within-docker-container
 if __name__ == "__main__":
 
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and '--line' not in sys.argv:
         results = lemma(sys.argv[1])
         print(' '.join(results))
 
     else:
-        input_path = Path('/data/input')
+        input_path = Path('/input')
         if input_path.exists() and input_path.is_dir():
             print('Saving lemmatized text to the output folder...')
-            Path('/data/output').mkdir(exist_ok=True)
             files = list(input_path.glob('**/*.txt'))
 
             for f in tqdm(files):
-                process_file(f)
+                process_file(f, per_line='--line' in sys.argv)
 
         else:
-            print('something went wrong, either give me some input as argument, i.e. `docker run -it lemma "Was ist das für ein Leben?" or mount a directory `/data` that has a sub-directory `/data/input` with .txt files in this directory')
+            print('something went wrong, either give me some input as argument, i.e. `docker run - it lemma "Was ist das für ein Leben?" or mount some volumes (check the README).')

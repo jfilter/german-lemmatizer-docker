@@ -25,23 +25,25 @@ Built upon:
 
     1. To lemmatize a string from the termial, run:
 
-    ```
-    docker run -it xx "Was ist das für ein Leben?"
+    ```bash
+    docker run -it filter/german-lemmatizer:0.2.0 "Was ist das für ein Leben?"
     ```
 
-    2. To lemmatize a collection of text, do as follows. Create a folder with a subfolder `input` and place your text as `.txt` files in that subfolder. Then give the absolute path to that folder (not the `input` folder) run:
+    2. To lemmatize a collection of text, add two local folders to the docker container (NB: you have to give absolute paths):
 
+    ```bash
+    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.2.0 [--line]
     ```
-    docker run -it -v /an/absolute/path/:/data xx
-    ```
+
+    With `--line` each lines is treated as a single document instead of the whole file.
 
 ## The Case for Reproduciblilty
 
-Everything – all the code and all the data – is packaged in the Docker image. This means that every lemmatization is reproduceable. For the future, I may update the data and code but I will tag each image with a specific version.
+Everything – all the code and all the data – is packaged in the Docker image. This means that every lemmatization is reproduceable. For the future, I may update the code and/or data but each images is tagged with a specific version.
 
 ## Dev Remarks
 
--   Tried to base in on an [Docker Apline Imaage](https://hub.docker.com/_/alpine/) but there were too many installation hassels.
+-   Tried to base in on an [Docker Apline Image](https://hub.docker.com/_/alpine/) but there were too many installation hassels.
 -   Tried to parallelise with [joblib](https://github.com/joblib/joblib) but it created too much overhead
 -   To build an image run `docker build -t lemma .` in this folder
 -   For debugging purposes, you may want enter the container and override the entry point: `docker run -it --entrypoint /bin/bash lemma`
