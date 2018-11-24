@@ -26,13 +26,13 @@ Built upon:
     1. To lemmatize a string from the termial, run:
 
     ```bash
-    docker run -it filter/german-lemmatizer:0.2.0 "Was ist das für ein Leben?"
+    docker run -it filter/german-lemmatizer:0.3.0 "Was ist das für ein Leben?"
     ```
 
     2. To lemmatize a collection of text, add two local folders to the docker container (NB: you have to give absolute paths):
 
     ```bash
-    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.2.0 [--line]
+    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.3.0 [--line]
     ```
 
     With `--line` each lines is treated as a single document instead of the whole file.
