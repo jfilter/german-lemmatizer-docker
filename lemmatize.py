@@ -70,18 +70,28 @@ def process_token(token_text, iwnlp_lemmas, pos):
     return res_word
 
 
+def _lemma(doc):
+    return [process_token(str(token), token._.iwnlp_lemmas, token.pos_) for token in doc]
+
+
 def lemma(text):
     doc = nlp(text)
-    # tried to parallelize it but there was too much overhead
-    return [process_token(str(token), token._.iwnlp_lemmas, token.pos_) for token in doc]
+    return _lemma(doc)
 
 
 def process_file(path, per_line):
     if per_line:
+        print(per_line)
         with open(Path('/output/' + path.name), 'w') as outfile:
             with open(path) as infile:
+                # process docs with spacy.pipe for performance reasons
+                lines = []
                 for text in infile:
-                    outfile.write(' '.join(lemma(text)))
+                    lines.append(text)
+                docs = nlp.pipe(lines)
+                for d in docs:
+                    outfile.write(' '.join(_lemma(d)))
+
     else:
         text = path.read_text()
         Path('/output/' + path.name).write_text(' '.join(lemma(text)))
