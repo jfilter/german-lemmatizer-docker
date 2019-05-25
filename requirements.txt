@@ -1,6 +1,6 @@
 pattern==3.6.0
 pyphen==0.9.5
-spacy==2.0.16
+spacy==2.1.4
 spacy-iwnlp==0.0.2
 joblib==0.12.5
 tqdm==4.28.1

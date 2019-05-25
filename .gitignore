@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 
 data
+de_core_news_md-2.1.0
