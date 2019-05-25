@@ -48,7 +48,7 @@ def replace_with_lemma(token_text, iwnlp_lemmas, pos):
             return iwnlp_lemmas[0]  # always first to be reproducible
 
 
-def process_token(token_text, iwnlp_lemmas, pos):
+def process_token(token_text, iwnlp_lemmas, pos, ws):
     # process and make some that some information about the case remains
     prc_tkn = replace_with_lemma(token_text, iwnlp_lemmas, pos)
     res_word = ''
@@ -67,11 +67,13 @@ def process_token(token_text, iwnlp_lemmas, pos):
     if token_text.istitle() and not res_word.istitle():
         res_word = res_word.title()
 
-    return res_word
+    # prepend original whitespace
+    return res_word + ws
 
 
 def _lemma(doc):
-    return [process_token(str(token), token._.iwnlp_lemmas, token.pos_) for token in doc]
+    lemmatized = [process_token(str(token), token._.iwnlp_lemmas, token.pos_, token.whitespace_) for token in doc]
+    return ''.join(lemmatized)
 
 
 def lemma(text):
@@ -90,11 +92,11 @@ def process_file(path, per_line):
                     lines.append(text)
                 docs = nlp.pipe(lines)
                 for d in docs:
-                    outfile.write(' '.join(_lemma(d)))
+                    outfile.write(_lemma(d))
 
     else:
         text = path.read_text()
-        Path('/output/' + path.name).write_text(' '.join(lemma(text)))
+        Path('/output/' + path.name).write_text(lemma(text))
 
 
 # # https://stackoverflow.com/questions/46245844/pass-arguments-to-python-argparse-within-docker-container
@@ -102,7 +104,7 @@ if __name__ == "__main__":
 
     if len(sys.argv) > 1 and '--line' not in sys.argv:
         results = lemma(sys.argv[1])
-        print(' '.join(results))
+        print(results)
 
     else:
         input_path = Path('/input')
