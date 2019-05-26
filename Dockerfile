@@ -20,11 +20,11 @@ RUN unzip a44431635dcc541620587605aac64f05e1b5f4f6.zip && rm a44431635dcc5416205
 RUN wget http://lager.cs.uni-duesseldorf.de/NLP/IWNLP/IWNLP.Lemmatizer_20181001.zip
 RUN unzip IWNLP.Lemmatizer_20181001.zip && rm IWNLP.Lemmatizer_20181001.zip
 
-# RUN python -m spacy download de_core_news_md
+# RUN python -m spacy download de_core_news_sm
 
 # fallback to locally download file because of CDN problems
-ADD de_core_news_md-2.1.0/ /app
-RUN python -m spacy link de_core_news_md de
+ADD de_core_news_sm-2.1.0/ /app
+RUN python -m spacy link de_core_news_sm de
 
 RUN python germalemma.py tiger_release_aug07.corrected.16012013.conll09 && rm tiger_release_aug07.corrected.16012013.conll09
 

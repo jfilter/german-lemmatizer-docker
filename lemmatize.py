@@ -2,20 +2,26 @@ import sys
 from itertools import zip_longest
 from pathlib import Path
 
-from tqdm import tqdm
-
 import spacy
 from germalemma import GermaLemma
 from spacy_iwnlp import spaCyIWNLP
 
 # setup IWNLP
-nlp = spacy.load('de_core_news_sm', disable=['parser', 'ner'])
+nlp = spacy.load('de', disable=['parser', 'ner'])
 iwnlp = spaCyIWNLP(
     lemmatizer_path='IWNLP.Lemmatizer_20181001.json')
 nlp.add_pipe(iwnlp)
 
 # setup GermaLemma
 lemmatizer = GermaLemma()
+
+
+def escape_text(text):
+    return text.replace("\n", "\\n")
+
+
+def unescape_text(text):
+    return text.replace("\\n", "\n")
 
 
 def replace_with_lemma(token_text, iwnlp_lemmas, pos):
@@ -81,18 +87,29 @@ def lemma(text):
     return _lemma(doc)
 
 
-def process_file(path, per_line):
+def process_file(path, per_line, escape):
     if per_line:
-        print(per_line)
         with open(Path('/output/' + path.name), 'w') as outfile:
             with open(path) as infile:
                 # process docs with spacy.pipe for performance reasons
                 lines = []
                 for text in infile:
+                    if escape:
+                        text = text.strip()
+                        text = unescape_text(text)
                     lines.append(text)
                 docs = nlp.pipe(lines)
+                results = []
                 for d in docs:
-                    outfile.write(_lemma(d))
+                    results.append(_lemma(d))
+
+                if escape:
+                    results = [escape_text(txt) for txt in results]
+                    results = '\n'.join(results)
+                else:
+                    # no need to add newlines because there are still part of the spacy whitespace
+                    results = ''.join(results)
+                outfile.write(results)
 
     else:
         text = path.read_text()
@@ -112,8 +129,8 @@ if __name__ == "__main__":
             print('Saving lemmatized text to the output folder...')
             files = list(input_path.glob('**/*.txt'))
 
-            for f in tqdm(files):
-                process_file(f, per_line='--line' in sys.argv)
+            for f in files:
+                process_file(f, per_line='--line' in sys.argv, escape='--escape' in sys.argv)
 
         else:
             print('something went wrong, either give me some input as argument, i.e. `docker run - it lemma "Was ist das für ein Leben?" or mount some volumes (check the README).')

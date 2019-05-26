@@ -2,16 +2,18 @@
   <img src="matt-artz-353291-unsplash.jpg" alt="Scissors">
 </div>
 
-# `German Lemmatizer`
+# German Lemmatizer Docker Image
 
-Combining the Power of Several Tools for [Lemmatization](https://en.wikipedia.org/wiki/Lemmatisation) of German Text.
+A Docker image to [lemmatize](https://en.wikipedia.org/wiki/Lemmatisation) German texts.
 
 Built upon:
 
 -   [IWNLP](https://github.com/Liebeck/spacy-iwnlp) uses the crowd-generated token tables on [de.wikitionary](https://de.wiktionary.org/).
 -   [GermaLemma](https://github.com/WZBSocialScienceCenter/germalemma): Looks up lemmas in the [TIGER Corpus](http://www.ims.uni-stuttgart.de/forschung/ressourcen/korpora/TIGERCorpus/) and uses [Pattern](https://www.clips.uantwerpen.be/pattern) as a fallback for some rule-based lemmatizations.
 
-`German Lemmatizer` works as follows. First [spaCy](https://spacy.io/) tags the token with POS. Then `German Lemmatizer` looks up lemmas on IWNLP and GermanLemma. If they disagree, choose the one from IWNLP. If they agree or only one tool finds it, take it. Try to preserve the casing of the original token.
+It works as follows. First [spaCy](https://spacy.io/) tags the token with POS. Then `German Lemmatizer` looks up lemmas on IWNLP and GermanLemma. If they disagree, choose the one from IWNLP. If they agree or only one tool finds it, take it. Try to preserve the casing of the original token.
+
+You may want to use the Python wrapper: [German Lemmatizer](https://github.com/jfilter/german-lemmatizer)
 
 ## Installation
 
@@ -26,16 +28,18 @@ Built upon:
     1. To lemmatize a string from the termial, run:
 
     ```bash
-    docker run -it filter/german-lemmatizer:0.3.0 "Was ist das für ein Leben?"
+    docker run -it filter/german-lemmatizer:0.4.0 "Was ist das für ein Leben?"
     ```
 
     2. To lemmatize a collection of text, add two local folders to the docker container (NB: you have to give absolute paths):
 
     ```bash
-    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.3.0 [--line]
+    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.4.0 [--line] [--escape]
     ```
 
-    With `--line` each lines is treated as a single document instead of the whole file.
+    With `--line` each line is treated as a single document instead of the whole file.
+
+    With `--escape` The newlines are escaped ('\n' -> '\\\n') for each document (per line), so the text in the input file has to be processed like this.
 
 ## The Case for Reproduciblilty
 
