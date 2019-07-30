@@ -28,18 +28,20 @@ You may want to use the Python wrapper: [German Lemmatizer](https://github.com/j
     1. To lemmatize a string from the termial, run:
 
     ```bash
-    docker run -it filter/german-lemmatizer:0.4.0 "Was ist das für ein Leben?"
+    docker run -it filter/german-lemmatizer:0.5.0 "Was ist das für ein Leben?" [--remove_stop]
     ```
 
     2. To lemmatize a collection of text, add two local folders to the docker container (NB: you have to give absolute paths):
 
     ```bash
-    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.4.0 [--line] [--escape]
+    docker run -it -v $(pwd)/some_input_folder:/input -v $(pwd)/some_output_folder:/output filter/german-lemmatizer:0.5.0 [--line] [--escape] [--remove_stop]
     ```
 
     With `--line` each line is treated as a single document instead of the whole file.
 
     With `--escape` The newlines are escaped ('\n' -> '\\\n') for each document (per line), so the text in the input file has to be processed like this.
+
+    `--remove_stop` removes stop words as defined by spaCy.
 
 ## The Case for Reproduciblilty
 
@@ -51,6 +53,7 @@ Everything – all the code and all the data – is packaged in the Docker image
 -   Tried to parallelise with [joblib](https://github.com/joblib/joblib) but it created too much overhead
 -   To build an image run `docker build -t lemma .` in this folder
 -   For debugging purposes, you may want enter the container and override the entry point: `docker run -it --entrypoint /bin/bash lemma`
+-   `docker build -t filter/german-lemmatizer:0.5.0` and `docker push filter/german-lemmatizer:0.5.0`
 
 ## License
 
