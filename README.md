@@ -53,7 +53,7 @@ Everything – all the code and all the data – is packaged in the Docker image
 -   Tried to parallelise with [joblib](https://github.com/joblib/joblib) but it created too much overhead
 -   To build an image run `docker build -t lemma .` in this folder
 -   For debugging purposes, you may want enter the container and override the entry point: `docker run -it --entrypoint /bin/bash lemma`
--   `docker build -t filter/german-lemmatizer:0.5.0` and `docker push filter/german-lemmatizer:0.5.0`
+-   `docker build -t filter/german-lemmatizer:0.5.0 .` and `docker push filter/german-lemmatizer:0.5.0`
 
 ## License
 
