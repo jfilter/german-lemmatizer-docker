@@ -2,4 +2,4 @@ pattern==3.6.0
 pyphen==0.9.5
 spacy==2.1.4
 spacy-iwnlp==0.0.2
-joblib==0.12.5
+joblib==1.2.0
